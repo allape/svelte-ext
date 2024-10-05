@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { LoadingType } from './components';
+  import type { LoadingType, ModalPosition } from './components';
   import Button from './components/Button.svelte';
   import FormLayout from './components/FormLayout.svelte';
   import FormLayoutItem from './components/FormLayoutItem.svelte';
+  import Modal from './components/Modal.svelte';
 
   let buttonProps = {
     LoadingTypes: {
@@ -32,6 +33,28 @@
     borderCollapse: false,
     value: {} as IFormValue,
   };
+
+  let modalProps = {
+    loading: false,
+    open: false,
+    width: 500,
+    position: 'center' as ModalPosition,
+    Positions: {
+      left: 'Left',
+      center: 'Center',
+      right: 'Right',
+    } as Record<ModalPosition, string>,
+    handleClick: () => {
+      modalProps.open = true;
+    },
+    handleCancelClick: (ms: number = 500) => {
+      modalProps.loading = true;
+      setTimeout(() => {
+        modalProps.open = false;
+        modalProps.loading = false;
+      }, ms);
+    },
+  };
 </script>
 
 <style lang="scss">
@@ -48,6 +71,8 @@
 </style>
 
 <div class="wrapper">
+  <h2>Svelte Extra: v{__APP_VERSION__}</h2>
+  <hr>
   <h2>Button</h2>
   <p>
     Timeout: <input type="range" min="500" max="20000" step="500" bind:value={buttonProps.ms}> {buttonProps.ms} ms
@@ -93,5 +118,39 @@
         <div slot="extra">This is the last name</div>
       </FormLayoutItem>
     </FormLayout>
+  </p>
+  <hr>
+  <h2>Modal</h2>
+  <p>
+    Width: <input type="range" min="100" max="2000" step="100" bind:value={modalProps.width}> {modalProps.width}
+    px
+    <br>
+    Position:
+    {#each Object.entries(modalProps.Positions) as [key, value]}
+      <label>
+        <input type="radio" name="position" value={key} bind:group={modalProps.position}>
+        {value}
+      </label>
+    {/each}
+  </p>
+  <p class="gapped">
+    <Button on:click={modalProps.handleClick}>Open Modal</Button>
+    <Modal bind:open={modalProps.open} width={modalProps.width} position={modalProps.position}>
+      <div slot="header">Header</div>
+      <div>
+        {#each new Array(200).fill(1) as i, ii}
+          body {i}, {ii}
+          <br>
+          Body
+          <br>
+          BODY
+          <br>
+        {/each}
+      </div>
+      <svelte:fragment slot="footer">
+        <Button on:click={() => modalProps.handleCancelClick(0)} disabled={modalProps.loading}>Cancel</Button>
+        <Button on:click={() => modalProps.handleCancelClick(3000)} loading={modalProps.loading}>OK</Button>
+      </svelte:fragment>
+    </Modal>
   </p>
 </div>

@@ -8,7 +8,7 @@ import Package from './package.json';
 export default defineConfig({
   plugins: [svelte(), cssInjectedByJsPlugin()],
   define: {
-    __APP_VERSION__: `"v${Package.version}"`,
+    __APP_VERSION__: `"${Package.version}"`,
   },
   build: {
     rollupOptions: {
