@@ -2,13 +2,13 @@
   import type { SvelteComponent } from 'svelte';
   import type { HTMLButtonAttributes } from 'svelte/elements';
   import DotLoading from './DotLoading.svelte';
+  import type { LoadingType } from './index';
   import SingleCharLoading from './SingleCharLoading.svelte';
-
-  type LoadingType = 'dot' | 'single-char';
 
   interface $$Props extends HTMLButtonAttributes {
     loading?: boolean;
     loadingType?: LoadingType;
+    loadingTimeout?: number;
   }
 
   const Loading: Record<LoadingType, Partial<SvelteComponent>> = {
@@ -17,6 +17,7 @@
   };
 
   export let loadingType: Exclude<$$Props['loadingType'], undefined> = 'dot';
+  export let loadingTimeout: Exclude<$$Props['loadingTimeout'], undefined> = 200;
 
   export let loading: $$Props['loading'] = false;
   export let disabled: $$Props['disabled'] = false;
@@ -38,6 +39,9 @@
       left: 0;
       width: 100%;
       height: 100%;
+      @media (prefers-color-scheme: dark) {
+        color: white;
+      }
     }
   }
 </style>
@@ -49,7 +53,7 @@
   {#if loading}
     <slot name="loading">
       <div class:loading>
-        <svelte:component this={Loading[loadingType]}/>
+        <svelte:component this={Loading[loadingType]} timeout={loadingTimeout}/>
       </div>
     </slot>
   {/if}
