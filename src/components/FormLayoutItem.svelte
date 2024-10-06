@@ -13,8 +13,8 @@
   }
 
   export let rules: $$Props['rules'] = [];
-  export let value: $$Props['value'];
-  export let name: $$Props['name'];
+  export let value: $$Props['value'] = '';
+  export let name: $$Props['name'] = '';
 
   export let colon: $$Props['colon'] = ':';
   export let justifyContent: $$Props['justifyContent'] = 'flex-end';
@@ -81,11 +81,13 @@
     <div class="control">
       <slot></slot>
     </div>
-    <div class="extra">
-      <slot name="extra"></slot>
-      {#each errors as error}
-        <div class="error">{error}</div>
-      {/each}
-    </div>
+    {#if $$slots.extra || errors.length > 0}
+      <div class="extra">
+        <slot name="extra"></slot>
+        {#each errors as error}
+          <div class="error">{error}</div>
+        {/each}
+      </div>
+    {/if}
   </td>
 </tr>
