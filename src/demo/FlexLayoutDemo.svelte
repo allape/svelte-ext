@@ -60,7 +60,6 @@
 
 <div class="wrapper">
   <h2>Flex Layout</h2>
-  <hr>
   <FormLayout>
     <FormLayoutItem>
       <label slot="label" for="">Gap</label>

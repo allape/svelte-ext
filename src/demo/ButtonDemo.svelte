@@ -29,8 +29,8 @@
 </style>
 
 <div class="wrapper">
+  <h2>Button</h2>
   <FormLayout>
-    <h2 slot="header">Button</h2>
     <FormLayoutItem>
       <label slot="label" for="">Timeout</label>
       <input type="range" min="500" max="20000" step="500" bind:value={ms}>
