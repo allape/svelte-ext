@@ -14,9 +14,9 @@ export default defineConfig({
 	define: {
 		__APP_VERSION__: `"${Package.version}"`
 	},
+	base: '/svelte-ext/',
 	build: {
 		rollupOptions: {
-			context: 'svelte-ext',
 			output: {
 				format: 'commonjs',
 				entryFileNames: 'app.js',
