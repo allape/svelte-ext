@@ -4,20 +4,24 @@
   import DotLoading from './DotLoading.svelte';
   import type { LoadingType } from './index';
   import SingleCharLoading from './SingleCharLoading.svelte';
+  import SpinnerLoading from './SpinnerLoading.svelte';
 
   interface $$Props extends HTMLButtonAttributes {
     loading?: boolean;
     loadingType?: LoadingType;
     loadingTimeout?: number;
+    loadingCharacter?: string;
   }
 
   const Loading: Record<LoadingType, Partial<SvelteComponent>> = {
-    'dot': DotLoading,
+    dot: DotLoading,
     'single-char': SingleCharLoading,
+    spinner: SpinnerLoading,
   };
 
   export let loadingType: Exclude<$$Props['loadingType'], undefined> = 'dot';
   export let loadingTimeout: Exclude<$$Props['loadingTimeout'], undefined> = 200;
+  export let loadingCharacter: $$Props['loadingCharacter'] = undefined;
 
   export let loading: $$Props['loading'] = false;
   export let disabled: $$Props['disabled'] = false;
@@ -53,7 +57,7 @@
   {#if loading}
     <slot name="loading">
       <div class:loading>
-        <svelte:component this={Loading[loadingType]} timeout={loadingTimeout}/>
+        <svelte:component this={Loading[loadingType]} timeout={loadingTimeout} character={loadingCharacter}/>
       </div>
     </slot>
   {/if}

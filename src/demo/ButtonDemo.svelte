@@ -2,18 +2,27 @@
   import type { LoadingType } from '../components';
   import Button from '../components/Button.svelte';
   import FlexLayout from '../components/FlexLayout.svelte';
+  import FlexLayoutItem from '../components/FlexLayoutItem.svelte';
   import FormLayout from '../components/FormLayout.svelte';
   import FormLayoutItem from '../components/FormLayoutItem.svelte';
 
+  const LoadingDefaultChars: Record<LoadingType, string> = {
+    dot: '...',
+    'single-char': '⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏',
+    spinner: '|',
+  };
+
   const LoadingTypes: Record<LoadingType, string> = {
-    'dot': 'Dot',
+    dot: 'Dot',
     'single-char': 'Single Character',
+    spinner: 'Spinner',
   };
 
   export let ms: number = 5000;
   export let loading: boolean = false;
   export let loadingType: LoadingType = 'dot';
   export let loadingTimeout: number = 200;
+  export let loadingCharacter: string = LoadingDefaultChars[loadingType];
 
   function handleClick() {
     console.log('Button clicked');
@@ -23,6 +32,9 @@
     }, ms);
   }
 
+  $: {
+    loadingCharacter = LoadingDefaultChars[loadingType];
+  }
 </script>
 
 <style lang="scss">
@@ -43,16 +55,24 @@
     </FormLayoutItem>
     <FormLayoutItem>
       <label slot="label" for="">Loading Type</label>
-      {#each Object.entries(LoadingTypes) as [key, value]}
-        <input id={value} type="radio" value={key} bind:group={loadingType}>
-        <label for={value}>{value}</label>
-      {/each}
+      <FlexLayout>
+        {#each Object.entries(LoadingTypes) as [key, value]}
+          <FlexLayoutItem>
+            <input id={value} type="radio" value={key} bind:group={loadingType}>
+            <label for={value}>{value}</label>
+          </FlexLayoutItem>
+        {/each}
+      </FlexLayout>
+    </FormLayoutItem>
+    <FormLayoutItem>
+      <label slot="label" for="">Loading Characters</label>
+      <input type="text" bind:value={loadingCharacter}>
     </FormLayoutItem>
   </FormLayout>
   <br>
   <FlexLayout>
-    <Button loading={loading} loadingType={loadingType}
-            loadingTimeout={loadingTimeout} on:click={handleClick}>
+    <Button {loading} {loadingType} {loadingCharacter}
+            {loadingTimeout} on:click={handleClick}>
       Wait for {ms} ms in {LoadingTypes[loadingType]} mode
     </Button>
     <Button disabled>Disabled Button</Button>

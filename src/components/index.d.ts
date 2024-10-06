@@ -13,7 +13,7 @@ export interface CSSProperties extends CSS.Properties<string | number> {
 	 */
 }
 
-export type LoadingType = 'dot' | 'single-char';
+export type LoadingType = 'dot' | 'single-char' | 'spinner';
 
 export interface IFormRule<VALUE = unknown, ERROR = unknown> {
 	message: string | ((result?: ERROR) => string);
@@ -21,3 +21,8 @@ export interface IFormRule<VALUE = unknown, ERROR = unknown> {
 }
 
 export type ModalPosition = 'left' | 'center' | 'right';
+
+export interface ILoadingComponentProps {
+	character?: string;
+	timeout?: number;
+}
